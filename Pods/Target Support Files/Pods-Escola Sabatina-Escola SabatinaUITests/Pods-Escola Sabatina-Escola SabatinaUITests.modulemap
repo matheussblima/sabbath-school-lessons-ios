@@ -1,6 +1,0 @@
-framework module Pods_Escola_Sabatina_Escola_SabatinaUITests {
-  umbrella header "Pods-Escola Sabatina-Escola SabatinaUITests-umbrella.h"
-
-  export *
-  module * { export * }
-}
