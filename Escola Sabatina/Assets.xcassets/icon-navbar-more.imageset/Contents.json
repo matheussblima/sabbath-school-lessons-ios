@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icon-navbar-more.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

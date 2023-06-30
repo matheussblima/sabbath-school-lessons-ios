@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "icon-navbar-filter.pdf",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
