@@ -13,6 +13,7 @@ struct Constants {
     struct API {
         static let baseUrl: String = "https://sabbath-school-stage.adventech.io/api/v1"
         static let languagesUrl: String = "\(baseUrl)/languages/index.json"
+        static func quarterliesUrl(languageCode: String) -> String { "\(baseUrl)/\(languageCode)/quarterlies/index.json" }
     }
 }
 

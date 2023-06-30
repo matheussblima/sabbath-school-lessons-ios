@@ -9,11 +9,21 @@ import Foundation
 import UIKit
 
 class LanguageController: UIViewController {
-    let languageViewModel = LanguageViewModel()
+    let languageViewModel: LanguageViewModel
     var languages: [Language]?
     var selectedLanguage: Language?
     
     let tabelView = UITableView()
+    
+    init(languageViewModel: LanguageViewModel) {
+        self.languageViewModel = languageViewModel
+        
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         initialSetup()
@@ -74,7 +84,7 @@ extension LanguageController: UITableViewDelegate {
         tabelView.deselectRow(at: indexPath, animated: true)
         
         if let languages = languages {
-            languageViewModel.selectedLanguage = languages[indexPath.row]
+            languageViewModel.selectLanguage(languages[indexPath.row])
             tableView.reloadData()
         }
         
@@ -82,6 +92,8 @@ extension LanguageController: UITableViewDelegate {
 }
 
 extension LanguageController: LanguageViewModelDelegate {
+    func didSelectedLanguage(_ language: Language) {}
+    
     func didGetLanguages(_ languages: [Language]?, error: DataError?) {
         self.languages = languages
         tabelView.reloadData()

@@ -10,7 +10,7 @@ import Foundation
 
 struct Lesson: Codable {
     let title: String
-    let startDate: String
+    let startDate: Date
     let endDate: String
     let id: String
     let index: String

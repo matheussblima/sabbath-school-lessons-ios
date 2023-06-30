@@ -14,7 +14,7 @@ class FilterViewCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         
-        style()
+        initialSetup()
         layout()
     }
     
@@ -25,9 +25,8 @@ class FilterViewCell: UICollectionViewCell {
 }
 
 extension FilterViewCell {
-    func style() {
+    func initialSetup() {
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.configuration = .filled()
     }
     
     func layout() {
@@ -36,7 +35,7 @@ extension FilterViewCell {
             button.topAnchor.constraint(equalTo: topAnchor),
             button.leadingAnchor.constraint(equalTo: leadingAnchor),
             button.trailingAnchor.constraint(equalTo: trailingAnchor),
-            button.bottomAnchor.constraint(equalTo: bottomAnchor)
+            button.bottomAnchor.constraint(equalTo: bottomAnchor),
         ])
     }
 }
@@ -44,5 +43,18 @@ extension FilterViewCell {
 extension FilterViewCell {
     func setTitleButton(_ title: String) {
         button.setTitle(title, for: .normal)
+    }
+    
+    func selectedButton() {
+        button.setTitleColor(.white, for: .normal)
+        button.configuration = .filled()
+        button.configuration?.background.backgroundColor = R.color.primaryColor()
+        button.configuration?.cornerStyle = .capsule
+    }
+    
+    func setUnSelectedButton() {
+        button.setTitleColor(.gray, for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
+        
     }
 }
