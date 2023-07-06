@@ -8,8 +8,7 @@
 import UIKit
 
 class QuarterlyController: UIViewController {
-    
-    var data: [String] = []
+    var data: [QuarterlyGroup] = []
     let languageViewModel = LanguageViewModel()
     let quarterlyViewModel = QuarterlyViewModel()
     let languageController: LanguageController
@@ -38,7 +37,7 @@ extension QuarterlyController {
         view.backgroundColor = .white
         
         languageViewModel.getLanguages()
-        languageViewModel.delegate = self
+        languageViewModel.add(delegates: [self, languageController])
         quarterlyViewModel.delegate = self
     
         //Navigation
@@ -85,22 +84,23 @@ extension QuarterlyController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FilterViewCell
         let data = self.data[indexPath.item]
-        cell.setTitleButton(data)
+        cell.setTitleButton(data.name)
+        cell.setUnSelectedButton()
+        cell.delegate = self
         
-        if indexPath.item == 0 {
-            cell.selectedButton()
-        } else {
-            cell.setUnSelectedButton()
+        if let selectedQuarterly = quarterlyViewModel.selectedQuarterly {
+            if selectedQuarterly == data {
+                cell.selectedButton()
+            }
         }
-        
-        
+
         return cell
     }
 }
 
 extension QuarterlyController: LanguageViewModelDelegate {
     func didSelectedLanguage(_ language: Language) {
-        quarterlyViewModel.getQuarterlies(language: languageViewModel.selectedLanguage)
+        quarterlyViewModel.getQuarterlies(language: language)
     }
     
     func didGetLanguages(_ languages: [Language]?, error: DataError?) {
@@ -109,22 +109,18 @@ extension QuarterlyController: LanguageViewModelDelegate {
 }
 
 extension QuarterlyController: QuarterlyViewModelDelegate {
-    func didGetQuarterlies(quarterlies: [Quarterly]?, error: DataError?) {
+    func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?) {
         if let error = error {
             print(error)
         }
         
-        guard let quarterlies = quarterlies else {
-            return
-        }
-        
-        let quarterlyGroup: Set<String> = Set(quarterlies.map({ qa in
-            qa.quarterlyGroup?.name ?? "Outros"
-        }))
-        
-        print(quarterlyGroup)
-        
-        self.data = Array(quarterlyGroup)
+        self.data = quarterlyViewModel.quarterliesGroup
         filterView.collectionView.reloadData()
+    }
+}
+
+extension QuarterlyController: FilterViewCellDelegete {
+    func didButtonTapped(cell: FilterViewCell) {
+        cell.selectedButton()
     }
 }

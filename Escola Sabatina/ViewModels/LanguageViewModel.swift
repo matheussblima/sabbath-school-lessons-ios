@@ -12,24 +12,21 @@ protocol LanguageViewModelDelegate: AnyObject {
     func didSelectedLanguage(_ language: Language)
 }
 
-class LanguageViewModel {
+class LanguageViewModel: MulticastDelegate<LanguageViewModelDelegate> {
     let languagesService = LanguagesService()
     var languages: [Language]?
     
-    weak var delegate: LanguageViewModelDelegate?
-    
     private(set) var selectedLanguage: Language = Language(name: "Portuguese", code: "pt")
    
-    
     func getLanguages() {
         languagesService.getLanguages { [self] result in
             switch result {
             case .success(let languages):
                 selectLanguageDefault(languages)
                 self.languages = languages
-                delegate?.didGetLanguages(languages, error: nil)
+                invokeForEachDelegate { $0.didGetLanguages(languages, error: nil) }
             case .failure(let error):
-                delegate?.didGetLanguages(nil, error: error)
+                invokeForEachDelegate { $0.didGetLanguages(nil, error: .netWorkingError(error.localizedDescription)) }
             }
         }
     }
@@ -44,7 +41,7 @@ class LanguageViewModel {
     }
     
     func selectLanguage(_ language: Language) {
-        delegate?.didSelectedLanguage(language)
+        invokeForEachDelegate { $0.didSelectedLanguage(language) }
         selectedLanguage = language
     }
     

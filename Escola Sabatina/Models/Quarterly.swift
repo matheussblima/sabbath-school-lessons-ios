@@ -26,7 +26,7 @@ struct Quarterly: Codable {
     let quarterlyName: String?
     let introduction: String
     let credits: [Credit]?
-    let features: [Feature]
+    let features: [Feature]?
     let quarterlyGroup: QuarterlyGroup?
     
     enum CodingKeys: String, CodingKey {
@@ -51,6 +51,10 @@ struct Quarterly: Codable {
         case features
         case quarterlyGroup = "quarterly_group"
 
+    }
+    
+    static func == (lhs: Quarterly, rhs: Quarterly) -> Bool {
+        lhs.id == rhs.id
     }
 }
 

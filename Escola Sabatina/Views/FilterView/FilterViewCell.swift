@@ -8,8 +8,14 @@
 import Foundation
 import UIKit
 
+protocol FilterViewCellDelegete: AnyObject {
+    func didButtonTapped(cell: FilterViewCell) -> Void
+}
+
 class FilterViewCell: UICollectionViewCell {
     var button: UIButton = UIButton(type: .system)
+    
+    weak var delegate: FilterViewCellDelegete?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,6 +33,7 @@ class FilterViewCell: UICollectionViewCell {
 extension FilterViewCell {
     func initialSetup() {
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(buttonTapped), for: .primaryActionTriggered)
     }
     
     func layout() {
@@ -35,7 +42,7 @@ extension FilterViewCell {
             button.topAnchor.constraint(equalTo: topAnchor),
             button.leadingAnchor.constraint(equalTo: leadingAnchor),
             button.trailingAnchor.constraint(equalTo: trailingAnchor),
-            button.bottomAnchor.constraint(equalTo: bottomAnchor),
+            button.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
@@ -54,7 +61,11 @@ extension FilterViewCell {
     
     func setUnSelectedButton() {
         button.setTitleColor(.gray, for: .normal)
+        button.configuration = .none
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        
+    }
+    
+    @objc private func buttonTapped() {
+        delegate?.didButtonTapped(cell: self)
     }
 }

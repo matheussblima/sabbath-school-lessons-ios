@@ -36,7 +36,6 @@ extension LanguageController {
         view.backgroundColor = .white
         title = "Languages"
 
-        languageViewModel.delegate = self
         languageViewModel.getLanguages()
         
         tabelView.translatesAutoresizingMaskIntoConstraints = false

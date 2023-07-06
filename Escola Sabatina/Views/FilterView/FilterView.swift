@@ -15,7 +15,7 @@ class FilterView: UIView {
     init() {
         let layoutFlow = UICollectionViewFlowLayout()
         layoutFlow.scrollDirection = .horizontal
-        layoutFlow.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
+        layoutFlow.estimatedItemSize = CGSize(width: 1, height: 1)
     
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layoutFlow)
         

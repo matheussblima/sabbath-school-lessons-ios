@@ -7,12 +7,16 @@
 
 import Foundation
 
-struct QuarterlyGroup: Codable {
+struct QuarterlyGroup: Codable, Hashable {
     let name: String
     let order: Int
     
     enum CodingKeys: CodingKey {
         case name
         case order
+    }
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(name)
     }
 }
