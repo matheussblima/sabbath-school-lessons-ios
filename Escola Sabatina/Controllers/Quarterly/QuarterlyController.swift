@@ -85,15 +85,16 @@ extension QuarterlyController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FilterViewCell
         let data = self.data[indexPath.item]
         cell.setTitleButton(data.name)
-        cell.setUnSelectedButton()
         cell.delegate = self
         
-        if let selectedQuarterly = quarterlyViewModel.selectedQuarterly {
-            if selectedQuarterly == data {
-                cell.selectedButton()
-            }
+        print(data)
+      
+        if data.isSelected {
+            cell.selectedButton()
+        } else {
+            cell.setUnSelectedButton()
         }
-
+    
         return cell
     }
 }
@@ -122,5 +123,11 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
 extension QuarterlyController: FilterViewCellDelegete {
     func didButtonTapped(cell: FilterViewCell) {
         cell.selectedButton()
+        for filterViewCell in filterView.collectionView.visibleCells  {
+            let filterViewCell = filterViewCell as! FilterViewCell
+            if filterViewCell != cell {
+                filterViewCell.setUnSelectedButton()
+            }
+        }
     }
 }

@@ -55,6 +55,7 @@ extension FilterViewCell {
     func selectedButton() {
         button.setTitleColor(.white, for: .normal)
         button.configuration = .filled()
+        button.configuration?.titleLineBreakMode = .byTruncatingTail
         button.configuration?.background.backgroundColor = R.color.primaryColor()
         button.configuration?.cornerStyle = .capsule
     }

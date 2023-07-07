@@ -10,6 +10,7 @@ import Foundation
 struct QuarterlyGroup: Codable, Hashable {
     let name: String
     let order: Int
+    var isSelected: Bool = false
     
     enum CodingKeys: CodingKey {
         case name

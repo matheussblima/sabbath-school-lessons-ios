@@ -15,13 +15,7 @@ class QuarterlyViewModel {
     let quarterliesService = QuarterliesService()
     private(set) var quarterlies: [Quarterly] = []
     private(set) var selectedQuarterly: QuarterlyGroup?
-    var quarterliesGroup: [QuarterlyGroup] {
-        let quarterlyGroup: Set<QuarterlyGroup> = Set(quarterlies.compactMap({ $0.quarterlyGroup }))
-        return Array(quarterlyGroup).sorted { itemA, itemB in
-            itemA.order < itemB.order
-        }
-    }
-    
+    var quarterliesGroup: [QuarterlyGroup] = []
     
     weak var delegate: QuarterlyViewModelDelegate?
     
@@ -31,6 +25,7 @@ class QuarterlyViewModel {
             case .success(let quarterlies):
                 if let quarterlies = quarterlies {
                     self.quarterlies = quarterlies
+                    setQuarterliesGroup(quarterlies)
                     
                     if let quarterlyGroup = quarterlies.first?.quarterlyGroup {
                         selectQuarterlyGroup(quarterlyGroup)
@@ -50,6 +45,16 @@ class QuarterlyViewModel {
             return
         }
         
-        selectedQuarterly = quarterlyGroup
+        for (index, _) in quarterliesGroup.enumerated() {
+            quarterliesGroup[index].isSelected = false
+        }
+        quarterliesGroup[index].isSelected = true
+    }
+    
+    private func setQuarterliesGroup(_ quarterlies: [Quarterly]) {
+        let quarterlyGroup: Set<QuarterlyGroup> = Set(quarterlies.compactMap({ $0.quarterlyGroup }))
+        quarterliesGroup = Array(quarterlyGroup).sorted { itemA, itemB in
+            itemA.order < itemB.order
+        }
     }
 }

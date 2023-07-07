@@ -35,8 +35,6 @@ extension LanguageController {
     private func initialSetup() {
         view.backgroundColor = .white
         title = "Languages"
-
-        languageViewModel.getLanguages()
         
         tabelView.translatesAutoresizingMaskIntoConstraints = false
         tabelView.dataSource = self
@@ -91,7 +89,9 @@ extension LanguageController: UITableViewDelegate {
 }
 
 extension LanguageController: LanguageViewModelDelegate {
-    func didSelectedLanguage(_ language: Language) {}
+    func didSelectedLanguage(_ language: Language) {
+        dismiss(animated: true)
+    }
     
     func didGetLanguages(_ languages: [Language]?, error: DataError?) {
         self.languages = languages
