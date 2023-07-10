@@ -11,6 +11,8 @@ class QuarterlyController: UIViewController {
     var data: [QuarterlyGroup] = []
     let languageViewModel = LanguageViewModel()
     let quarterlyViewModel = QuarterlyViewModel()
+    let containerQuartelyLesson = UIView()
+    let quartelyLessonController = QuartelyLessonController()
     let languageController: LanguageController
     
     let filterView = FilterView()
@@ -51,12 +53,20 @@ extension QuarterlyController {
         
         filterView.translatesAutoresizingMaskIntoConstraints = false
         filterView.collectionView.dataSource = self
-        filterView.collectionView.register(FilterViewCell.self, forCellWithReuseIdentifier: "cell")
+        filterView.collectionView.register(FilterViewCell.self, forCellWithReuseIdentifier: FilterViewCell.indentifier)
         
+        containerQuartelyLesson.translatesAutoresizingMaskIntoConstraints = false
+        containerQuartelyLesson.backgroundColor = .blue
+        
+        quartelyLessonController.view.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func layout() {
         view.addSubview(filterView)
+        view.addSubview(containerQuartelyLesson)
+        addChild(quartelyLessonController)
+        containerQuartelyLesson.addSubview(quartelyLessonController.view)
+        quartelyLessonController.didMove(toParent: self)
         
         NSLayoutConstraint.activate([
             filterView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -64,6 +74,20 @@ extension QuarterlyController {
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: filterView.trailingAnchor, multiplier: 2),
             filterView.heightAnchor.constraint(equalToConstant: 50)
         ])
+        
+        NSLayoutConstraint.activate([
+            containerQuartelyLesson.topAnchor.constraint(equalToSystemSpacingBelow: filterView.bottomAnchor, multiplier: 1),
+            containerQuartelyLesson.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: containerQuartelyLesson.trailingAnchor, multiplier: 2),
+            view.bottomAnchor.constraint(equalToSystemSpacingBelow: containerQuartelyLesson.bottomAnchor, multiplier: 2)
+        ])
+        
+        NSLayoutConstraint.activate([
+            quartelyLessonController.view.leadingAnchor.constraint(equalTo: containerQuartelyLesson.leadingAnchor),
+             quartelyLessonController.view.trailingAnchor.constraint(equalTo: containerQuartelyLesson.trailingAnchor),
+             quartelyLessonController.view.topAnchor.constraint(equalTo: containerQuartelyLesson.topAnchor),
+             quartelyLessonController.view.bottomAnchor.constraint(equalTo: containerQuartelyLesson.bottomAnchor)
+         ])
         
     }
 }
@@ -82,7 +106,7 @@ extension QuarterlyController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FilterViewCell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterViewCell.indentifier, for: indexPath) as! FilterViewCell
         let data = self.data[indexPath.item]
         cell.setTitleButton(data.name)
         cell.delegate = self

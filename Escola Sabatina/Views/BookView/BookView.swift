@@ -8,15 +8,16 @@
 import Foundation
 import UIKit
 
-class FilterView: UIView {
+class BookView: UIView {
     
     var collectionView: UICollectionView
     
     init() {
         let layoutFlow = UICollectionViewFlowLayout()
-        layoutFlow.scrollDirection = .horizontal
+        layoutFlow.scrollDirection = .vertical
         layoutFlow.estimatedItemSize = CGSize(width: 1, height: 1)
-    
+        layoutFlow.minimumInteritemSpacing = 10
+        layoutFlow.minimumLineSpacing = 10
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layoutFlow)
         
         super.init(frame: .zero)
@@ -31,21 +32,20 @@ class FilterView: UIView {
     
 }
 
-extension FilterView {
+extension BookView {
     private func initialSetup() {
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.showsHorizontalScrollIndicator = false
+        collectionView.showsVerticalScrollIndicator = false
     }
     private func layout() {
         addSubview(collectionView)
+
         
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: topAnchor),
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 50)
-
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }

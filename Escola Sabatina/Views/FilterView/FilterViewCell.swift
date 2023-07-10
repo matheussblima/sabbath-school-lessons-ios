@@ -13,6 +13,8 @@ protocol FilterViewCellDelegete: AnyObject {
 }
 
 class FilterViewCell: UICollectionViewCell {
+    static let indentifier =  "idFilterViewCell"
+    
     var button: UIButton = UIButton(type: .system)
     
     weak var delegate: FilterViewCellDelegete?

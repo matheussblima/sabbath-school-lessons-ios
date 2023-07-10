@@ -41,6 +41,10 @@
 		B3F322F70927237A20DDB543 /* Pods_Escola_SabatinaTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 525B502B2766083984D9C392 /* Pods_Escola_SabatinaTests.framework */; };
 		F9572CE42A56F51C005CF568 /* DataError.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9572CE32A56F51C005CF568 /* DataError.swift */; };
 		F9572CE82A56FAD4005CF568 /* MulticastDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9572CE72A56FAD4005CF568 /* MulticastDelegate.swift */; };
+		F9572CEB2A58573E005CF568 /* BookViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9572CEA2A58573E005CF568 /* BookViewCell.swift */; };
+		F9572CEE2A585A44005CF568 /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9572CED2A585A44005CF568 /* Image.swift */; };
+		F9572CF32A589BB1005CF568 /* BookView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9572CF22A589BB1005CF568 /* BookView.swift */; };
+		F9BA561E2A5C348B00310B6B /* QuartelyLessonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BA561D2A5C348B00310B6B /* QuartelyLessonController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,6 +108,10 @@
 		F0AC31677F9E46411F3044DC /* Pods-Escola Sabatina-Escola SabatinaUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Escola Sabatina-Escola SabatinaUITests.debug.xcconfig"; path = "Target Support Files/Pods-Escola Sabatina-Escola SabatinaUITests/Pods-Escola Sabatina-Escola SabatinaUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		F9572CE32A56F51C005CF568 /* DataError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataError.swift; sourceTree = "<group>"; };
 		F9572CE72A56FAD4005CF568 /* MulticastDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MulticastDelegate.swift; sourceTree = "<group>"; };
+		F9572CEA2A58573E005CF568 /* BookViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookViewCell.swift; sourceTree = "<group>"; };
+		F9572CED2A585A44005CF568 /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
+		F9572CF22A589BB1005CF568 /* BookView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookView.swift; sourceTree = "<group>"; };
+		F9BA561D2A5C348B00310B6B /* QuartelyLessonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuartelyLessonController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +159,7 @@
 			isa = PBXGroup;
 			children = (
 				671164D52A43A6C6008B309A /* QuarterlyController.swift */,
+				F9BA561D2A5C348B00310B6B /* QuartelyLessonController.swift */,
 			);
 			path = Quarterly;
 			sourceTree = "<group>";
@@ -247,6 +256,7 @@
 		671165032A43A6FB008B309A /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				F9572CE92A58571E005CF568 /* BookView */,
 				676609032A461C79003E9A24 /* FilterView */,
 			);
 			path = Views;
@@ -292,6 +302,7 @@
 			isa = PBXGroup;
 			children = (
 				676608F72A45FB3B003E9A24 /* String.swift */,
+				F9572CED2A585A44005CF568 /* Image.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -326,6 +337,15 @@
 				3436A59158233CD219AA386A /* Pods-Escola SabatinaTests.release.xcconfig */,
 			);
 			path = Pods;
+			sourceTree = "<group>";
+		};
+		F9572CE92A58571E005CF568 /* BookView */ = {
+			isa = PBXGroup;
+			children = (
+				F9572CEA2A58573E005CF568 /* BookViewCell.swift */,
+				F9572CF22A589BB1005CF568 /* BookView.swift */,
+			);
+			path = BookView;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -574,8 +594,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				676609062A463505003E9A24 /* FilterViewCell.swift in Sources */,
+				F9BA561E2A5C348B00310B6B /* QuartelyLessonController.swift in Sources */,
+				F9572CEE2A585A44005CF568 /* Image.swift in Sources */,
 				676609012A4618A5003E9A24 /* FilterView.swift in Sources */,
 				6711651A2A449792008B309A /* Pdf.swift in Sources */,
+				F9572CEB2A58573E005CF568 /* BookViewCell.swift in Sources */,
 				6711651C2A44989F008B309A /* Read.swift in Sources */,
 				671165282A44AF74008B309A /* Constants.swift in Sources */,
 				671164D62A43A6C6008B309A /* QuarterlyController.swift in Sources */,
@@ -590,6 +613,7 @@
 				671165162A44961F008B309A /* LessonInfo.swift in Sources */,
 				670358382A4CB06F00085FB7 /* LanguageViewModel.swift in Sources */,
 				676608FF2A45FFFD003E9A24 /* LanguageController.swift in Sources */,
+				F9572CF32A589BB1005CF568 /* BookView.swift in Sources */,
 				6703584C2A4F24B800085FB7 /* QuarterlyViewModel.swift in Sources */,
 				676608F82A45FB3B003E9A24 /* String.swift in Sources */,
 				6711650E2A448FBB008B309A /* Credit.swift in Sources */,
