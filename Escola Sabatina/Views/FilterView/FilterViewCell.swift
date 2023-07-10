@@ -9,12 +9,13 @@ import Foundation
 import UIKit
 
 protocol FilterViewCellDelegete: AnyObject {
-    func didButtonTapped(cell: FilterViewCell) -> Void
+    func didButtonTapped(cell: FilterViewCell, quarterlyGroup: QuarterlyGroup?) -> Void
 }
 
 class FilterViewCell: UICollectionViewCell {
     static let indentifier =  "idFilterViewCell"
     
+    var quarterlyGroup: QuarterlyGroup?
     var button: UIButton = UIButton(type: .system)
     
     weak var delegate: FilterViewCellDelegete?
@@ -69,6 +70,6 @@ extension FilterViewCell {
     }
     
     @objc private func buttonTapped() {
-        delegate?.didButtonTapped(cell: self)
+        delegate?.didButtonTapped(cell: self, quarterlyGroup: quarterlyGroup)
     }
 }

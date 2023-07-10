@@ -36,7 +36,6 @@ extension BookViewCell {
         bookCoverImage.clipsToBounds = true
         bookCoverImage.contentMode = .scaleToFill
         
-        
         content.layer.shadowColor = UIColor.gray.cgColor
         content.layer.shadowRadius = 4.0
         content.layer.shadowOpacity = 0.2

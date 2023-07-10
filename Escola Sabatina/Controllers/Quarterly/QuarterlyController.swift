@@ -19,7 +19,6 @@ class QuarterlyController: UIViewController {
     
     init() {
         self.languageController = LanguageController(languageViewModel: languageViewModel)
-        
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -40,7 +39,7 @@ extension QuarterlyController {
         
         languageViewModel.getLanguages()
         languageViewModel.add(delegates: [self, languageController])
-        quarterlyViewModel.delegate = self
+        quarterlyViewModel.add(delegates: [self, quartelyLessonController])
     
         //Navigation
         title = Constants.appName
@@ -109,9 +108,8 @@ extension QuarterlyController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterViewCell.indentifier, for: indexPath) as! FilterViewCell
         let data = self.data[indexPath.item]
         cell.setTitleButton(data.name)
+        cell.quarterlyGroup = data
         cell.delegate = self
-        
-        print(data)
       
         if data.isSelected {
             cell.selectedButton()
@@ -145,8 +143,13 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
 }
 
 extension QuarterlyController: FilterViewCellDelegete {
-    func didButtonTapped(cell: FilterViewCell) {
+    func didButtonTapped(cell: FilterViewCell, quarterlyGroup: QuarterlyGroup?) {
         cell.selectedButton()
+        
+        if let quarterlyGroup = quarterlyGroup {
+            quarterlyViewModel.selectQuarterlyGroup(quarterlyGroup)
+        }
+        
         for filterViewCell in filterView.collectionView.visibleCells  {
             let filterViewCell = filterViewCell as! FilterViewCell
             if filterViewCell != cell {

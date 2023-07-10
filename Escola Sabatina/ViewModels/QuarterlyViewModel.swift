@@ -11,13 +11,11 @@ protocol QuarterlyViewModelDelegate: AnyObject {
     func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?)
 }
 
-class QuarterlyViewModel {
+class QuarterlyViewModel: MulticastDelegate<QuarterlyViewModelDelegate> {
     let quarterliesService = QuarterliesService()
     private(set) var quarterlies: [Quarterly] = []
     private(set) var selectedQuarterly: QuarterlyGroup?
     var quarterliesGroup: [QuarterlyGroup] = []
-    
-    weak var delegate: QuarterlyViewModelDelegate?
     
     func getQuarterlies(language: Language) {
         quarterliesService.getQuarterlies(language: language) { [self] response in
@@ -28,27 +26,30 @@ class QuarterlyViewModel {
                     setQuarterliesGroup(quarterlies)
                     
                     if let quarterlyGroup = quarterlies.first?.quarterlyGroup {
-                        selectQuarterlyGroup(quarterlyGroup)
+                       return selectQuarterlyGroup(quarterlyGroup)
                     }
                 }
-                delegate?.didGetQuarterlies(self, error: nil)
+                invokeForEachDelegate { $0.didGetQuarterlies(self, error: nil) }
                 
             case .failure(let error):
-                delegate?.didGetQuarterlies(self, error: error)
+                invokeForEachDelegate { $0.didGetQuarterlies(self, error: error) }
             }
         }
     }
     
-    func selectQuarterlyGroup(_ quarterlyGroup: QuarterlyGroup) {
+     func selectQuarterlyGroup(_ quarterlyGroup: QuarterlyGroup) {
         guard let index = quarterliesGroup.firstIndex(where: { $0 == quarterlyGroup }) else {
             selectedQuarterly = quarterliesGroup.first
             return
         }
-        
+
+        selectedQuarterly = quarterlyGroup
         for (index, _) in quarterliesGroup.enumerated() {
             quarterliesGroup[index].isSelected = false
         }
         quarterliesGroup[index].isSelected = true
+        
+        invokeForEachDelegate { $0.didGetQuarterlies(self, error: nil) }
     }
     
     private func setQuarterliesGroup(_ quarterlies: [Quarterly]) {

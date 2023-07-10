@@ -9,6 +9,7 @@ target 'Escola Sabatina' do
 
   pod 'Alamofire'
   pod 'SkeletonView'
+  pod 'SDWebImage'
 
   target 'Escola SabatinaTests' do
     inherit! :search_paths

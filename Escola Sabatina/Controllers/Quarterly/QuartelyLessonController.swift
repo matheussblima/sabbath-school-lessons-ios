@@ -6,18 +6,19 @@
 //
 
 import Foundation
+import SDWebImage
 import UIKit
 
 class QuartelyLessonController: UIViewController {
     
     var bookView = BookView()
-  
+    var quarterlies = [Quarterly]()
+    
     override func viewDidLoad() {
         initialSetup()
         layout()
     }
 }
-
 
 extension QuartelyLessonController {
     private func initialSetup() {
@@ -43,27 +44,25 @@ extension QuartelyLessonController {
 
 extension QuartelyLessonController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 20
+        return quarterlies.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookViewCell.identifier, for: indexPath) as! BookViewCell
         
-       let widthItem = (view.frame.width - 12) / 2
+        let widthItem = (view.frame.width - 12) / 2
         let heightItem: CGFloat = 200
         
         NSLayoutConstraint.activate([
             cell.content.widthAnchor.constraint(lessThanOrEqualToConstant: widthItem),
             cell.content.heightAnchor.constraint(lessThanOrEqualToConstant: heightItem)
         ])
-    
-        guard let fileUrl = URL(string: "https://sabbath-school-stage.adventech.io/api/v2/en/quarterlies/2023-03/cover.png") else {
-            return UICollectionViewCell()
+        
+        if !quarterlies.isEmpty {
+            let data = quarterlies[indexPath.item]
+            cell.bookCoverImage.sd_setImage(with: data.cover)
         }
-        
-        
-        cell.bookCoverImage.imageFrom(url: fileUrl)
-        
+
         return cell
         
     }
@@ -75,5 +74,14 @@ extension QuartelyLessonController: UICollectionViewDelegateFlowLayout {
         let heightItem: CGFloat = 200
         
         return CGSize.init(width: widthItem, height: heightItem)
+    }
+}
+
+extension QuartelyLessonController: QuarterlyViewModelDelegate {
+    func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?) {
+        quarterlies = quarterlyViewModel.quarterlies.filter {
+            $0.quarterlyGroup == quarterlyViewModel.selectedQuarterly
+        }
+        bookView.collectionView.reloadData()
     }
 }
