@@ -10,7 +10,7 @@ import UIKit
 
 
 protocol BookViewCellDelegate: AnyObject {
-    func didCellTapped(cell: BookViewCell, quarterly: Quarterly?)
+    func didCellTapped(cell: BookViewCell, quarterly: Quarterly)
 }
 
 class BookViewCell: UICollectionViewCell {
@@ -77,6 +77,8 @@ extension BookViewCell {
         UIView.animate(withDuration: 0.5) {
             self.bookCoverImage.alpha = 1.0
         }
-        delegate?.didCellTapped(cell: self, quarterly: quarterly)
+        if let quarterly = quarterly {
+            delegate?.didCellTapped(cell: self, quarterly: quarterly)
+        }
     }
 }

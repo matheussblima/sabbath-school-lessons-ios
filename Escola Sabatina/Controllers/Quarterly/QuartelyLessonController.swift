@@ -22,7 +22,6 @@ class QuartelyLessonController: UIViewController {
 
 extension QuartelyLessonController {
     private func initialSetup() {
-        view.backgroundColor = .orange
         bookView.translatesAutoresizingMaskIntoConstraints = false
         bookView.collectionView.dataSource = self
         bookView.collectionView.delegate = self
@@ -92,7 +91,7 @@ extension QuartelyLessonController: QuarterlyViewModelDelegate {
 }
 
 extension QuartelyLessonController: BookViewCellDelegate {
-    func didCellTapped(cell: BookViewCell, quarterly: Quarterly?) {
-        print(quarterly?.title ?? "")
+    func didCellTapped(cell: BookViewCell, quarterly: Quarterly) {
+        navigationController?.pushViewController(LessonController(quarterly: quarterly), animated: true)
     }
 }

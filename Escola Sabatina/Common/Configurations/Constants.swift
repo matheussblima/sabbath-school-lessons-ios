@@ -11,9 +11,12 @@ struct Constants {
     static let appName: String = "Sabbath School".localized
     
     struct API {
-        static let baseUrl: String = "https://sabbath-school-stage.adventech.io/api/v1"
+        static let baseUrl: String = "https://sabbath-school-stage.adventech.io/api/v2"
         static let languagesUrl: String = "\(baseUrl)/languages/index.json"
         static func quarterliesUrl(languageCode: String) -> String { "\(baseUrl)/\(languageCode)/quarterlies/index.json" }
+        static func lessonsURL(idQuartely: String, languageCode: String) -> String {
+            "\(baseUrl)/\(languageCode)/quarterlies/\(idQuartely)/lessons/index.json"
+        }
     }
 }
 
