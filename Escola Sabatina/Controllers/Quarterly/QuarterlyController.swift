@@ -132,6 +132,8 @@ extension QuarterlyController: LanguageViewModelDelegate {
 }
 
 extension QuarterlyController: QuarterlyViewModelDelegate {
+    func didSelectedQuarterly(_ quarterlyViewModel: QuarterlyViewModel) {}
+    
     func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?) {
         if let error = error {
             print(error)
@@ -142,12 +144,13 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
     }
 }
 
-extension QuarterlyController: FilterViewCellDelegete {
+extension QuarterlyController: FilterViewCellDelegate {
     func didButtonTapped(cell: FilterViewCell, quarterlyGroup: QuarterlyGroup?) {
         cell.selectedButton()
         
         if let quarterlyGroup = quarterlyGroup {
             quarterlyViewModel.selectQuarterlyGroup(quarterlyGroup)
+            self.data = quarterlyViewModel.quarterliesGroup
         }
         
         for filterViewCell in filterView.collectionView.visibleCells  {

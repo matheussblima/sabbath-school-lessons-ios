@@ -50,8 +50,10 @@ extension QuartelyLessonController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: BookViewCell.identifier, for: indexPath) as! BookViewCell
         
+        cell.delegate = self
+        
         let widthItem = (view.frame.width - 12) / 2
-        let heightItem: CGFloat = 200
+        let heightItem: CGFloat = 220
         
         NSLayoutConstraint.activate([
             cell.content.widthAnchor.constraint(lessThanOrEqualToConstant: widthItem),
@@ -61,6 +63,7 @@ extension QuartelyLessonController: UICollectionViewDataSource {
         if !quarterlies.isEmpty {
             let data = quarterlies[indexPath.item]
             cell.bookCoverImage.sd_setImage(with: data.cover)
+            cell.quarterly = data
         }
 
         return cell
@@ -71,17 +74,25 @@ extension QuartelyLessonController: UICollectionViewDataSource {
 extension QuartelyLessonController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         let widthItem = (view.frame.width - 12) / 2
-        let heightItem: CGFloat = 200
+        let heightItem: CGFloat = 220
         
         return CGSize.init(width: widthItem, height: heightItem)
     }
 }
 
 extension QuartelyLessonController: QuarterlyViewModelDelegate {
-    func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?) {
+    func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?) {}
+    
+    func didSelectedQuarterly(_ quarterlyViewModel: QuarterlyViewModel) {
         quarterlies = quarterlyViewModel.quarterlies.filter {
-            $0.quarterlyGroup == quarterlyViewModel.selectedQuarterly
+            $0.quarterlyGroup?.name == quarterlyViewModel.selectedQuarterly?.name
         }
         bookView.collectionView.reloadData()
+    }
+}
+
+extension QuartelyLessonController: BookViewCellDelegate {
+    func didCellTapped(cell: BookViewCell, quarterly: Quarterly?) {
+        print(quarterly?.title ?? "")
     }
 }

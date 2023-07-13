@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-protocol FilterViewCellDelegete: AnyObject {
+protocol FilterViewCellDelegate: AnyObject {
     func didButtonTapped(cell: FilterViewCell, quarterlyGroup: QuarterlyGroup?) -> Void
 }
 
@@ -18,7 +18,7 @@ class FilterViewCell: UICollectionViewCell {
     var quarterlyGroup: QuarterlyGroup?
     var button: UIButton = UIButton(type: .system)
     
-    weak var delegate: FilterViewCellDelegete?
+    weak var delegate: FilterViewCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

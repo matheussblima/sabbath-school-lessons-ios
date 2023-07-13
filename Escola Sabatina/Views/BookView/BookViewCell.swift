@@ -8,11 +8,21 @@
 import Foundation
 import UIKit
 
+
+protocol BookViewCellDelegate: AnyObject {
+    func didCellTapped(cell: BookViewCell, quarterly: Quarterly?)
+}
+
 class BookViewCell: UICollectionViewCell {
     static let identifier = "idBookViewCell"
     
     let bookCoverImage = UIImageView()
+    let tapGestureRecognizer = UITapGestureRecognizer()
+    
+    var quarterly: Quarterly?
     let content = UIView()
+    
+    weak var delegate: BookViewCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -35,6 +45,10 @@ extension BookViewCell {
         bookCoverImage.layer.masksToBounds = true
         bookCoverImage.clipsToBounds = true
         bookCoverImage.contentMode = .scaleToFill
+        bookCoverImage.isUserInteractionEnabled = true
+        bookCoverImage.addGestureRecognizer(tapGestureRecognizer)
+        
+        tapGestureRecognizer.addTarget(self, action: #selector(imageTapped))
         
         content.layer.shadowColor = UIColor.gray.cgColor
         content.layer.shadowRadius = 4.0
@@ -54,5 +68,15 @@ extension BookViewCell {
             bookCoverImage.trailingAnchor.constraint(equalTo: content.trailingAnchor),
             bookCoverImage.bottomAnchor.constraint(equalTo: content.bottomAnchor),
         ])
+    }
+}
+
+extension BookViewCell {
+    @objc func imageTapped() {
+        bookCoverImage.alpha = 0.75
+        UIView.animate(withDuration: 0.5) {
+            self.bookCoverImage.alpha = 1.0
+        }
+        delegate?.didCellTapped(cell: self, quarterly: quarterly)
     }
 }

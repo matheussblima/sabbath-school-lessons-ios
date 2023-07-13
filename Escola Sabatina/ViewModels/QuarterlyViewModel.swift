@@ -9,6 +9,7 @@ import Foundation
 
 protocol QuarterlyViewModelDelegate: AnyObject {
     func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?)
+    func didSelectedQuarterly(_ quarterlyViewModel: QuarterlyViewModel)
 }
 
 class QuarterlyViewModel: MulticastDelegate<QuarterlyViewModelDelegate> {
@@ -26,7 +27,7 @@ class QuarterlyViewModel: MulticastDelegate<QuarterlyViewModelDelegate> {
                     setQuarterliesGroup(quarterlies)
                     
                     if let quarterlyGroup = quarterlies.first?.quarterlyGroup {
-                       return selectQuarterlyGroup(quarterlyGroup)
+                        selectQuarterlyGroup(quarterlyGroup)
                     }
                 }
                 invokeForEachDelegate { $0.didGetQuarterlies(self, error: nil) }
@@ -38,18 +39,18 @@ class QuarterlyViewModel: MulticastDelegate<QuarterlyViewModelDelegate> {
     }
     
      func selectQuarterlyGroup(_ quarterlyGroup: QuarterlyGroup) {
-        guard let index = quarterliesGroup.firstIndex(where: { $0 == quarterlyGroup }) else {
+         guard let index = quarterliesGroup.firstIndex(where: { $0.name == quarterlyGroup.name }) else {
             selectedQuarterly = quarterliesGroup.first
             return
         }
-
-        selectedQuarterly = quarterlyGroup
-        for (index, _) in quarterliesGroup.enumerated() {
-            quarterliesGroup[index].isSelected = false
-        }
-        quarterliesGroup[index].isSelected = true
-        
-        invokeForEachDelegate { $0.didGetQuarterlies(self, error: nil) }
+         
+         for (index, _) in quarterliesGroup.enumerated() {
+             quarterliesGroup[index].isSelected = false
+         }
+         quarterliesGroup[index].isSelected = true
+         selectedQuarterly = quarterliesGroup[index]
+    
+        invokeForEachDelegate { $0.didSelectedQuarterly(self) }
     }
     
     private func setQuarterliesGroup(_ quarterlies: [Quarterly]) {
