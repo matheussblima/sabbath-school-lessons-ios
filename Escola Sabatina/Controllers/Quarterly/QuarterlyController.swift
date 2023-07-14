@@ -30,6 +30,7 @@ class QuarterlyController: UIViewController {
         super.viewDidLoad()
         initialSetup()
         layout()
+        setupNavigation()
     }
 }
 
@@ -40,15 +41,6 @@ extension QuarterlyController {
         languageViewModel.getLanguages()
         languageViewModel.add(delegates: [self, languageController])
         quarterlyViewModel.add(delegates: [self, quartelyLessonController])
-    
-        //Navigation
-        title = Constants.appName
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.leftBarButtonItem = UIBarButtonItem(image: R.image.iconNavbarSettings(), style: .plain, target: self, action: #selector(settingButtonItemTapped))
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: R.image.iconNavbarLanguage(), style: .plain, target: self, action: #selector(languageButtonItemTapped))
-        navigationController?.navigationBar.backgroundColor = .white
-        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
-        navigationController?.navigationBar.tintColor = .black
         
         filterView.translatesAutoresizingMaskIntoConstraints = false
         filterView.collectionView.dataSource = self
@@ -89,6 +81,16 @@ extension QuarterlyController {
          ])
         
     }
+    
+    private func setupNavigation() {
+        title = Constants.appName
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.leftBarButtonItem = UIBarButtonItem(image: R.image.iconNavbarSettings(), style: .plain, target: self, action: #selector(settingButtonItemTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(image: R.image.iconNavbarLanguage(), style: .plain, target: self, action: #selector(languageButtonItemTapped))
+        navigationController?.navigationBar.backgroundColor = .white
+        navigationController?.navigationBar.titleTextAttributes = [.foregroundColor: UIColor.black]
+        navigationController?.navigationBar.tintColor = .black
+    }
 }
 
 extension QuarterlyController {
@@ -109,6 +111,7 @@ extension QuarterlyController: UICollectionViewDataSource {
         let data = self.data[indexPath.item]
         cell.setTitleButton(data.name)
         cell.quarterlyGroup = data
+        cell.indexPath = indexPath
         cell.delegate = self
       
         if data.isSelected {
@@ -145,8 +148,10 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
 }
 
 extension QuarterlyController: FilterViewCellDelegate {
-    func didButtonTapped(cell: FilterViewCell, quarterlyGroup: QuarterlyGroup?) {
+    func didButtonTapped(cell: FilterViewCell, indexPath: IndexPath, quarterlyGroup: QuarterlyGroup?) {
         cell.selectedButton()
+
+        filterView.collectionView.scrollToItem(at: indexPath , at: .centeredHorizontally, animated: true)
         
         if let quarterlyGroup = quarterlyGroup {
             quarterlyViewModel.selectQuarterlyGroup(quarterlyGroup)

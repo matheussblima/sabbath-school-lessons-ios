@@ -32,15 +32,13 @@ class LessonController: UIViewController {
         super.viewDidLoad()
         initialSetup()
         layout()
+        setupNavigation()
     }
 }
 
 extension LessonController {
     private func initialSetup() {
         view.backgroundColor = .white
-        
-        title = quarterly.title
-        navigationController?.navigationBar.prefersLargeTitles = false
         
         lessonViewModel.getLanguages(idQuartely: quarterly.id, languageCode: quarterly.lang)
         lessonViewModel.add(delegate: self)
@@ -52,9 +50,8 @@ extension LessonController {
         tabelView.tableHeaderView = header
         tabelView.dataSource = self
         tabelView.register(UITableViewCell.self, forCellReuseIdentifier: LessonController.identifier)
-        
-        
     }
+    
     private func layout() {
         view.addSubview(tabelView)
         
@@ -71,6 +68,11 @@ extension LessonController {
             tabelView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
 
+    }
+    
+    private func setupNavigation() {
+        title = quarterly.title
+        navigationItem.largeTitleDisplayMode = .never
     }
 }
 
