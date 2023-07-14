@@ -57,7 +57,7 @@ extension LessonController {
         view.addSubview(tabelView)
         
         if let splash = quarterly.splash {
-            header.image.sd_setImage(with: quarterly.splash)
+            header.image.sd_setImage(with: splash)
             tabelView.tableHeaderView = header
             
             NSLayoutConstraint.activate([
@@ -117,6 +117,18 @@ extension LessonController: UITableViewDataSource {
     
 }
 
+extension LessonController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        
+        let data = lessons[indexPath.row]
+        
+        navigationController?.pushViewController(ReaderController(lesson: data, idQuartely: quarterly.id, languageCode: quarterly.lang), animated: true)
+        
+    }
+}
+
+
 extension LessonController: LessonViewModelDelegate {
     func didGetLessons(_ lessons: [Lesson]?, error: DataError?) {
         self.lessons = lessons ?? []
@@ -124,8 +136,3 @@ extension LessonController: LessonViewModelDelegate {
     }
 }
 
-extension LessonController: UITableViewDelegate {
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-}
