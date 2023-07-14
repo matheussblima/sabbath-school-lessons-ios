@@ -8,18 +8,26 @@
 import Foundation
 import UIKit
 
-protocol FilterViewCellDelegate: AnyObject {
-    func didButtonTapped(cell: FilterViewCell, indexPath: IndexPath, quarterlyGroup: QuarterlyGroup?) -> Void
-}
-
 class FilterViewCell: UICollectionViewCell {
     static let indentifier =  "idFilterViewCell"
+        
+    override var isSelected: Bool {
+        get {
+            return super.isSelected
+        }
+        set {
+            if !newValue {
+                setUnSelectedCell()
+            } else {
+                setSelectedCell()
+            }
+            super.isSelected = newValue
+        }
+    }
     
     var quarterlyGroup: QuarterlyGroup?
-    var indexPath = IndexPath()
-    var button: UIButton = UIButton(type: .system)
-    
-    weak var delegate: FilterViewCellDelegate?
+    var content = UIView()
+    var label = UILabel()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -31,46 +39,46 @@ class FilterViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
 }
 
 extension FilterViewCell {
     func initialSetup() {
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(buttonTapped), for: .primaryActionTriggered)
+        content.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = .gray
     }
     
     func layout() {
-        addSubview(button)
+        content.addSubview(label)
+        addSubview(content)
+ 
         NSLayoutConstraint.activate([
-            button.topAnchor.constraint(equalTo: topAnchor),
-            button.leadingAnchor.constraint(equalTo: leadingAnchor),
-            button.trailingAnchor.constraint(equalTo: trailingAnchor),
-            button.bottomAnchor.constraint(equalTo: bottomAnchor)
+            content.topAnchor.constraint(equalTo: topAnchor),
+            content.leadingAnchor.constraint(equalTo: leadingAnchor),
+            content.trailingAnchor.constraint(equalTo: trailingAnchor),
+            content.bottomAnchor.constraint(equalTo: bottomAnchor),
+            content.heightAnchor.constraint(equalToConstant: 34)
+        ])
+        
+        NSLayoutConstraint.activate([
+            label.topAnchor.constraint(equalToSystemSpacingBelow: content.topAnchor, multiplier: 1),
+            label.leadingAnchor.constraint(equalToSystemSpacingAfter: content.leadingAnchor, multiplier: 1.5),
+            content.trailingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.5),
+            content.bottomAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1)
         ])
     }
 }
 
 extension FilterViewCell {
-    func setTitleButton(_ title: String) {
-        button.setTitle(title, for: .normal)
+    private func setSelectedCell() {
+        label.textColor = .white
+        content.backgroundColor = R.color.primaryColor()
+        content.layer.cornerRadius = 34 / 2
     }
     
-    func selectedButton() {
-        button.setTitleColor(.white, for: .normal)
-        button.configuration = .filled()
-        button.configuration?.titleLineBreakMode = .byTruncatingTail
-        button.configuration?.background.backgroundColor = R.color.primaryColor()
-        button.configuration?.cornerStyle = .capsule
-    }
-    
-    func setUnSelectedButton() {
-        button.setTitleColor(.gray, for: .normal)
-        button.configuration = .none
-        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-    }
-    
-    @objc private func buttonTapped() {
-        delegate?.didButtonTapped(cell: self, indexPath: indexPath, quarterlyGroup: quarterlyGroup)
+    private func setUnSelectedCell() {
+        label.textColor = .gray
+        content.backgroundColor = .none
     }
 }

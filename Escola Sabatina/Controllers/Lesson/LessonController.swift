@@ -40,15 +40,19 @@ extension LessonController {
     private func initialSetup() {
         view.backgroundColor = .white
         
-        lessonViewModel.getLanguages(idQuartely: quarterly.id, languageCode: quarterly.lang)
+        lessonViewModel.getLessons(idQuartely: quarterly.id, languageCode: quarterly.lang)
         lessonViewModel.add(delegate: self)
         
         header.translatesAutoresizingMaskIntoConstraints = false
-        header.image.sd_setImage(with: quarterly.splash)
+        print("===> \(quarterly.splash)")
+        if let splash = quarterly.splash {
+            header.image.sd_setImage(with: quarterly.splash)
+        }
         
         tabelView.translatesAutoresizingMaskIntoConstraints = false
         tabelView.tableHeaderView = header
         tabelView.dataSource = self
+        tabelView.delegate = self
         tabelView.register(UITableViewCell.self, forCellReuseIdentifier: LessonController.identifier)
     }
     
@@ -118,3 +122,8 @@ extension LessonController: LessonViewModelDelegate {
     }
 }
 
+extension LessonController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+    }
+}

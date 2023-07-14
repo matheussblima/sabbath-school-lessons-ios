@@ -15,7 +15,7 @@ class LessonViewModel: MulticastDelegate<LessonViewModelDelegate> {
     let lessonsService = LessonsService()
     var lessons: [Lesson]?
    
-    func getLanguages(idQuartely: String, languageCode: String) {
+    func getLessons(idQuartely: String, languageCode: String) {
         lessonsService.getLessons(idQuartely: idQuartely, languageCode: languageCode) { [self] result in
             switch result {
             case .success(let lessons):

@@ -44,6 +44,7 @@ extension QuarterlyController {
         
         filterView.translatesAutoresizingMaskIntoConstraints = false
         filterView.collectionView.dataSource = self
+        filterView.collectionView.delegate = self
         filterView.collectionView.register(FilterViewCell.self, forCellWithReuseIdentifier: FilterViewCell.indentifier)
         
         containerQuartelyLesson.translatesAutoresizingMaskIntoConstraints = false
@@ -62,12 +63,11 @@ extension QuarterlyController {
         NSLayoutConstraint.activate([
             filterView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             filterView.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
-            view.trailingAnchor.constraint(equalToSystemSpacingAfter: filterView.trailingAnchor, multiplier: 2),
-            filterView.heightAnchor.constraint(equalToConstant: 50)
+            view.trailingAnchor.constraint(equalToSystemSpacingAfter: filterView.trailingAnchor, multiplier: 2)
         ])
         
         NSLayoutConstraint.activate([
-            containerQuartelyLesson.topAnchor.constraint(equalToSystemSpacingBelow: filterView.bottomAnchor, multiplier: 1),
+            containerQuartelyLesson.topAnchor.constraint(equalToSystemSpacingBelow: filterView.bottomAnchor, multiplier: 2),
             containerQuartelyLesson.leadingAnchor.constraint(equalToSystemSpacingAfter: view.leadingAnchor, multiplier: 2),
             view.trailingAnchor.constraint(equalToSystemSpacingAfter: containerQuartelyLesson.trailingAnchor, multiplier: 2),
             view.bottomAnchor.constraint(equalToSystemSpacingBelow: containerQuartelyLesson.bottomAnchor, multiplier: 2)
@@ -109,18 +109,19 @@ extension QuarterlyController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: FilterViewCell.indentifier, for: indexPath) as! FilterViewCell
         let data = self.data[indexPath.item]
-        cell.setTitleButton(data.name)
+        cell.label.text = data.name
         cell.quarterlyGroup = data
-        cell.indexPath = indexPath
-        cell.delegate = self
-      
-        if data.isSelected {
-            cell.selectedButton()
-        } else {
-            cell.setUnSelectedButton()
-        }
     
         return cell
+    }
+}
+
+extension QuarterlyController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        filterView.collectionView.scrollToItem(at: indexPath , at: .centeredHorizontally, animated: true)
+        var data = self.data[indexPath.item]
+        quarterlyViewModel.selectQuarterlyGroup(data)
+        self.data = quarterlyViewModel.quarterliesGroup
     }
 }
 
@@ -144,25 +145,9 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
         
         self.data = quarterlyViewModel.quarterliesGroup
         filterView.collectionView.reloadData()
+        
+        let firstItem:IndexPath = IndexPath(row: 0, section: 0)
+        filterView.collectionView.selectItem(at: firstItem, animated: false, scrollPosition: .left)
     }
 }
 
-extension QuarterlyController: FilterViewCellDelegate {
-    func didButtonTapped(cell: FilterViewCell, indexPath: IndexPath, quarterlyGroup: QuarterlyGroup?) {
-        cell.selectedButton()
-
-        filterView.collectionView.scrollToItem(at: indexPath , at: .centeredHorizontally, animated: true)
-        
-        if let quarterlyGroup = quarterlyGroup {
-            quarterlyViewModel.selectQuarterlyGroup(quarterlyGroup)
-            self.data = quarterlyViewModel.quarterliesGroup
-        }
-        
-        for filterViewCell in filterView.collectionView.visibleCells  {
-            let filterViewCell = filterViewCell as! FilterViewCell
-            if filterViewCell != cell {
-                filterViewCell.setUnSelectedButton()
-            }
-        }
-    }
-}

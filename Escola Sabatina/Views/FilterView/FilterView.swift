@@ -15,7 +15,9 @@ class FilterView: UIView {
     init() {
         let layoutFlow = UICollectionViewFlowLayout()
         layoutFlow.scrollDirection = .horizontal
-        layoutFlow.estimatedItemSize = CGSize(width: 1, height: 1)
+        layoutFlow.estimatedItemSize = CGSize(width: 100, height: 34)
+        layoutFlow.minimumInteritemSpacing = 0
+        layoutFlow.minimumLineSpacing = 0
     
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layoutFlow)
         
@@ -44,7 +46,7 @@ extension FilterView {
             collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 50)
+            collectionView.heightAnchor.constraint(equalToConstant: 34)
 
         ])
     }

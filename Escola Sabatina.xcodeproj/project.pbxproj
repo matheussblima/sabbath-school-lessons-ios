@@ -47,6 +47,7 @@
 		F999A53D2A60322E00CED354 /* LessonViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = F999A53C2A60322E00CED354 /* LessonViewModel.swift */; };
 		F999A5412A604E4800CED354 /* LessonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F999A5402A604E4800CED354 /* LessonController.swift */; };
 		F999A5442A60781E00CED354 /* StretchyTabelHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F999A5432A60781E00CED354 /* StretchyTabelHeaderView.swift */; };
+		F999A54C2A617DB900CED354 /* ReaderController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F999A54B2A617DB900CED354 /* ReaderController.swift */; };
 		F9BA561E2A5C348B00310B6B /* QuartelyLessonController.swift in Sources */ = {isa = PBXBuildFile; fileRef = F9BA561D2A5C348B00310B6B /* QuartelyLessonController.swift */; };
 /* End PBXBuildFile section */
 
@@ -117,6 +118,7 @@
 		F999A53C2A60322E00CED354 /* LessonViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonViewModel.swift; sourceTree = "<group>"; };
 		F999A5402A604E4800CED354 /* LessonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LessonController.swift; sourceTree = "<group>"; };
 		F999A5432A60781E00CED354 /* StretchyTabelHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StretchyTabelHeaderView.swift; sourceTree = "<group>"; };
+		F999A54B2A617DB900CED354 /* ReaderController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReaderController.swift; sourceTree = "<group>"; };
 		F9BA561D2A5C348B00310B6B /* QuartelyLessonController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QuartelyLessonController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -234,6 +236,7 @@
 		671165012A43A6E1008B309A /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				F999A5492A617CCF00CED354 /* Reader */,
 				F999A5382A602C5300CED354 /* Lesson */,
 				6703583F2A4F0EFB00085FB7 /* Language */,
 				6703583D2A4F0ECE00085FB7 /* Quarterly */,
@@ -371,6 +374,14 @@
 				F999A5432A60781E00CED354 /* StretchyTabelHeaderView.swift */,
 			);
 			path = StretchyTabelHeaderView;
+			sourceTree = "<group>";
+		};
+		F999A5492A617CCF00CED354 /* Reader */ = {
+			isa = PBXGroup;
+			children = (
+				F999A54B2A617DB900CED354 /* ReaderController.swift */,
+			);
+			path = Reader;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -626,6 +637,7 @@
 				F999A53B2A602D2B00CED354 /* LessonsService.swift in Sources */,
 				F9572CEB2A58573E005CF568 /* BookViewCell.swift in Sources */,
 				6711651C2A44989F008B309A /* Read.swift in Sources */,
+				F999A54C2A617DB900CED354 /* ReaderController.swift in Sources */,
 				671165282A44AF74008B309A /* Constants.swift in Sources */,
 				671164D62A43A6C6008B309A /* QuarterlyController.swift in Sources */,
 				F9572CE42A56F51C005CF568 /* DataError.swift in Sources */,
