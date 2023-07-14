@@ -43,27 +43,29 @@ extension LessonController {
         lessonViewModel.getLessons(idQuartely: quarterly.id, languageCode: quarterly.lang)
         lessonViewModel.add(delegate: self)
         
-        header.translatesAutoresizingMaskIntoConstraints = false
-        print("===> \(quarterly.splash)")
-        if let splash = quarterly.splash {
-            header.image.sd_setImage(with: quarterly.splash)
-        }
-        
         tabelView.translatesAutoresizingMaskIntoConstraints = false
-        tabelView.tableHeaderView = header
+       
         tabelView.dataSource = self
         tabelView.delegate = self
         tabelView.register(UITableViewCell.self, forCellReuseIdentifier: LessonController.identifier)
+        
+        header.translatesAutoresizingMaskIntoConstraints = false
+  
     }
     
     private func layout() {
         view.addSubview(tabelView)
         
-        NSLayoutConstraint.activate([
-            header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            header.heightAnchor.constraint(equalToConstant: 400)
-        ])
+        if let splash = quarterly.splash {
+            header.image.sd_setImage(with: quarterly.splash)
+            tabelView.tableHeaderView = header
+            
+            NSLayoutConstraint.activate([
+                header.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                header.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                header.heightAnchor.constraint(equalToConstant: 400)
+            ])
+        }
         
         NSLayoutConstraint.activate([
             tabelView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
