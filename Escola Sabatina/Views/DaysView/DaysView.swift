@@ -10,20 +10,19 @@ import UIKit
 
 class DaysView: UIView {
     
-    let container = UIView()
-    let label = UILabel()
-    let collectionView: UICollectionView
+    var collectionView: UICollectionView
+    var label = UILabel()
     
-    override init(frame: CGRect) {
+    init() {
         let layoutFlow = UICollectionViewFlowLayout()
         layoutFlow.scrollDirection = .horizontal
-        layoutFlow.estimatedItemSize = CGSize(width: 50, height: 90)
+        layoutFlow.estimatedItemSize = CGSize(width: 40, height: 40)
         layoutFlow.minimumInteritemSpacing = 0
-        layoutFlow.minimumLineSpacing = 0
+        layoutFlow.minimumLineSpacing = 10
     
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layoutFlow)
         
-        super.init(frame: frame)
+        super.init(frame: .zero)
         
         initialSetup()
         layout()
@@ -32,41 +31,36 @@ class DaysView: UIView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+    
 }
 
 extension DaysView {
     private func initialSetup() {
-        container.translatesAutoresizingMaskIntoConstraints = false
-        container.backgroundColor = R.color.grayColor()
-        
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Coisas da vida"
+        backgroundColor = R.color.grayColor()
         
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.showsHorizontalScrollIndicator = false
+        collectionView.backgroundColor = R.color.grayColor()
+     
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldSystemFont(ofSize: 16)
+        label.textColor = R.color.grayDark()
+
     }
-    
     private func layout() {
-        container.addSubview(label)
-        container.addSubview(collectionView)
-        addSubview(container)
+        addSubview(label)
+        addSubview(collectionView)
         
         NSLayoutConstraint.activate([
-            container.topAnchor.constraint(equalTo: topAnchor),
-            container.leadingAnchor.constraint(equalTo: leadingAnchor),
-            container.trailingAnchor.constraint(equalTo: trailingAnchor),
-            container.heightAnchor.constraint(equalToConstant: 90)
+            label.topAnchor.constraint(equalToSystemSpacingBelow: topAnchor, multiplier: 1),
+            label.centerXAnchor.constraint(equalTo: centerXAnchor)
         ])
         
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalToSystemSpacingBelow: container.topAnchor, multiplier: 1),
-            label.centerXAnchor.constraint(equalTo: container.centerXAnchor),
-        ])
-        
-        NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
+            collectionView.heightAnchor.constraint(equalToConstant: 50)
         ])
     }
 }

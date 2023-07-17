@@ -50,6 +50,19 @@ extension ReaderController {
         daysView.translatesAutoresizingMaskIntoConstraints = false
         daysView.collectionView.dataSource = self
         daysView.collectionView.register(DaysViewCell.self, forCellWithReuseIdentifier: DaysViewCell.indentifier)
+        
+        let dateFormatterGet = DateFormatter()
+        dateFormatterGet.dateFormat = "dd/MM/yyyy"
+
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM dd"
+
+        let dateStart: Date? = dateFormatterGet.date(from: lesson.startDate)
+        let dateEnd: Date? = dateFormatterGet.date(from: lesson.endDate)
+        
+        if let dateStart = dateStart, let dateEnd = dateEnd {
+            daysView.label.text = "\(dateFormatter.string(from: dateStart).capitalized) - \(dateFormatter.string(from: dateEnd).capitalized)"
+        }
     }
     
     private func layout() {
@@ -58,7 +71,8 @@ extension ReaderController {
         NSLayoutConstraint.activate([
             daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             daysView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            daysView.heightAnchor.constraint(equalToConstant: 90)
         ])
     }
     
@@ -78,9 +92,19 @@ extension ReaderController: UICollectionViewDataSource {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DaysViewCell.indentifier, for: indexPath) as! DaysViewCell
         
         let data = days[indexPath.row]
-        print("===> \(data)")
-        cell.label.text = data.date
+        print("===> \(data.date)")
         
+        let dataFormatter = DateFormatter()
+        dataFormatter.dateFormat = "dd/MM/yyyy"
+        
+        let getDataFormatter = DateFormatter()
+        getDataFormatter.dateFormat = "dd"
+        
+        let date = dataFormatter.date(from: data.date)
+        
+        if let date = date {
+            cell.label.text = getDataFormatter.string(from: date)
+        }
         return cell
     }
     

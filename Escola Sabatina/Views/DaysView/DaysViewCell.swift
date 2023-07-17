@@ -44,9 +44,14 @@ class DaysViewCell: UICollectionViewCell {
 extension DaysViewCell {
     func initialSetup() {
         content.translatesAutoresizingMaskIntoConstraints = false
+        content.layer.cornerRadius = 40 / 2
+        content.clipsToBounds = true
+        content.backgroundColor = R.color.grayDark()
+
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldSystemFont(ofSize: 16)
         label.textColor = .white
+        
     }
     
     func layout() {
@@ -55,30 +60,23 @@ extension DaysViewCell {
  
         NSLayoutConstraint.activate([
             content.topAnchor.constraint(equalTo: topAnchor),
-            content.leadingAnchor.constraint(equalTo: leadingAnchor),
-            content.trailingAnchor.constraint(equalTo: trailingAnchor),
-            content.bottomAnchor.constraint(equalTo: bottomAnchor),
-            content.heightAnchor.constraint(equalToConstant: 34)
+            content.widthAnchor.constraint(equalToConstant: 40),
+            content.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         NSLayoutConstraint.activate([
-            label.topAnchor.constraint(equalToSystemSpacingBelow: content.topAnchor, multiplier: 1),
-            label.leadingAnchor.constraint(equalToSystemSpacingAfter: content.leadingAnchor, multiplier: 1.5),
-            content.trailingAnchor.constraint(equalToSystemSpacingAfter: label.trailingAnchor, multiplier: 1.5),
-            content.bottomAnchor.constraint(equalToSystemSpacingBelow: label.bottomAnchor, multiplier: 1)
+            label.centerXAnchor.constraint(equalTo: content.centerXAnchor),
+            label.centerYAnchor.constraint(equalTo: content.centerYAnchor)
         ])
     }
 }
 
 extension DaysViewCell {
     private func setSelectedCell() {
-        label.textColor = .white
         content.backgroundColor = R.color.primaryColor()
-        content.layer.cornerRadius = 34 / 2
     }
     
     private func setUnSelectedCell() {
-        label.textColor = .white
-        content.backgroundColor = .none
+        content.backgroundColor = R.color.grayDark()
     }
 }

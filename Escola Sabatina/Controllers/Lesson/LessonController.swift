@@ -108,8 +108,6 @@ extension LessonController: UITableViewDataSource {
             configuration.secondaryText = "\(dateFormatter.string(from: dateStart).capitalized) - \(dateFormatter.string(from: dateEnd).capitalized)"
         }
         
-       
-        
         cell.contentConfiguration = configuration
         
         return cell
