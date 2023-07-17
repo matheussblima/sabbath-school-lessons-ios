@@ -26,8 +26,10 @@ class DaysViewCell: UICollectionViewCell {
     }
     
     var quarterlyGroup: QuarterlyGroup?
-    var content = UIView()
-    var label = UILabel()
+    let content = UIView()
+    let labelDay = UILabel()
+    let labelDayName = UILabel()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -47,26 +49,37 @@ extension DaysViewCell {
         content.layer.cornerRadius = 40 / 2
         content.clipsToBounds = true
         content.backgroundColor = R.color.grayDark()
+        
+        labelDayName.translatesAutoresizingMaskIntoConstraints = false
+        labelDayName.font = UIFont.boldSystemFont(ofSize: 16)
+        labelDayName.textColor = R.color.grayDark()
 
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.boldSystemFont(ofSize: 16)
-        label.textColor = .white
+        labelDay.translatesAutoresizingMaskIntoConstraints = false
+        labelDay.font = UIFont.boldSystemFont(ofSize: 14)
+        labelDay.textColor = .white
         
     }
     
     func layout() {
-        content.addSubview(label)
+        content.addSubview(labelDay)
+        addSubview(labelDayName)
         addSubview(content)
  
         NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: topAnchor),
+            labelDayName.topAnchor.constraint(equalTo: topAnchor),
+            labelDayName.centerXAnchor.constraint(equalTo: centerXAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            content.topAnchor.constraint(equalToSystemSpacingBelow: labelDayName.bottomAnchor, multiplier: 1),
+            content.centerXAnchor.constraint(equalTo: centerXAnchor),
             content.widthAnchor.constraint(equalToConstant: 40),
             content.heightAnchor.constraint(equalToConstant: 40)
         ])
         
         NSLayoutConstraint.activate([
-            label.centerXAnchor.constraint(equalTo: content.centerXAnchor),
-            label.centerYAnchor.constraint(equalTo: content.centerYAnchor)
+            labelDay.centerXAnchor.constraint(equalTo: content.centerXAnchor),
+            labelDay.centerYAnchor.constraint(equalTo: content.centerYAnchor)
         ])
     }
 }
@@ -74,9 +87,11 @@ extension DaysViewCell {
 extension DaysViewCell {
     private func setSelectedCell() {
         content.backgroundColor = R.color.primaryColor()
+        labelDayName.textColor = R.color.primaryColor()
     }
     
     private func setUnSelectedCell() {
         content.backgroundColor = R.color.grayDark()
+        labelDayName.textColor = R.color.grayDark()
     }
 }

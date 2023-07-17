@@ -95,16 +95,14 @@ extension LessonController: UITableViewDataSource {
         var configuration = cell.defaultContentConfiguration()
         configuration.text = data.title
         
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "dd/MM/yyyy"
-
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
 
-        let dateStart: Date? = dateFormatterGet.date(from: data.startDate)
-        let dateEnd: Date? = dateFormatterGet.date(from: data.endDate)
+        let dateStart: Date? = dateFormatter.date(from: data.startDate)
+        let dateEnd: Date? = dateFormatter.date(from: data.endDate)
         
         if let dateStart = dateStart, let dateEnd = dateEnd {
+            dateFormatter.dateFormat = "MMM dd"
             configuration.secondaryText = "\(dateFormatter.string(from: dateStart).capitalized) - \(dateFormatter.string(from: dateEnd).capitalized)"
         }
         

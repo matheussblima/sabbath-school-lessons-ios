@@ -49,6 +49,7 @@ extension ReaderController {
         
         daysView.translatesAutoresizingMaskIntoConstraints = false
         daysView.collectionView.dataSource = self
+        daysView.collectionView.delegate = self
         daysView.collectionView.register(DaysViewCell.self, forCellWithReuseIdentifier: DaysViewCell.indentifier)
         
         let dateFormatterGet = DateFormatter()
@@ -72,12 +73,11 @@ extension ReaderController {
             daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             daysView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            daysView.heightAnchor.constraint(equalToConstant: 90)
+            daysView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120)
         ])
     }
     
     private func setupNavigation() {
-        print(lesson.title)
         title = lesson.title
         navigationItem.largeTitleDisplayMode = .never
     }
@@ -85,30 +85,35 @@ extension ReaderController {
 
 extension ReaderController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return days.count
+        return days.count > 7 ? 7 : days.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DaysViewCell.indentifier, for: indexPath) as! DaysViewCell
         
         let data = days[indexPath.row]
-        print("===> \(data.date)")
         
         let dataFormatter = DateFormatter()
         dataFormatter.dateFormat = "dd/MM/yyyy"
         
-        let getDataFormatter = DateFormatter()
-        getDataFormatter.dateFormat = "dd"
-        
         let date = dataFormatter.date(from: data.date)
         
         if let date = date {
-            cell.label.text = getDataFormatter.string(from: date)
+            dataFormatter.dateFormat = "dd"
+            cell.labelDay.text = dataFormatter.string(from: date)
+            dataFormatter.dateFormat = "EEE"
+            cell.labelDayName.text = dataFormatter.string(from: date).uppercased()
         }
         return cell
     }
-    
-    
+}
+
+extension ReaderController: UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        
+        let size = (collectionView.frame.size.width - 60) / 7
+        return CGSize(width: size, height: collectionView.frame.size.height)
+    }
 }
 
 extension ReaderController: DayViewModelDelegate {

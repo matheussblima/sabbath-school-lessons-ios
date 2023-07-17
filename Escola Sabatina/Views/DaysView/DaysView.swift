@@ -16,7 +16,7 @@ class DaysView: UIView {
     init() {
         let layoutFlow = UICollectionViewFlowLayout()
         layoutFlow.scrollDirection = .horizontal
-        layoutFlow.estimatedItemSize = CGSize(width: 40, height: 40)
+        layoutFlow.estimatedItemSize = UICollectionViewFlowLayout.automaticSize
         layoutFlow.minimumInteritemSpacing = 0
         layoutFlow.minimumLineSpacing = 10
     
@@ -57,10 +57,10 @@ extension DaysView {
         ])
         
         NSLayoutConstraint.activate([
-            collectionView.trailingAnchor.constraint(equalTo: trailingAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: bottomAnchor),
-            collectionView.heightAnchor.constraint(equalToConstant: 50)
+            collectionView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: collectionView.trailingAnchor, multiplier: 2),
+            bottomAnchor.constraint(equalToSystemSpacingBelow: collectionView.bottomAnchor, multiplier: 1),
+            collectionView.heightAnchor.constraint(equalToConstant: 70)
         ])
     }
 }
