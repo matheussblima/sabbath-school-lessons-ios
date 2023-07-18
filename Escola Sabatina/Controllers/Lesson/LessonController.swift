@@ -12,7 +12,7 @@ import SDWebImage
 class LessonController: UIViewController {
     static let identifier = "idLessonTabelView"
     var lessons = [Lesson]()
-    let header = StretchyTabelHeaderView()
+    let header = TabelHeaderView()
     let tabelView = UITableView()
     let quarterly: Quarterly
     let lessonViewModel = LessonViewModel()

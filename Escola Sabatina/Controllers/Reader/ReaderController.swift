@@ -18,7 +18,9 @@ class ReaderController: UIViewController {
     let dayViewModel = DayViewModel()
     let readViewModel = ReadViewModel()
    
+    let lessonInfoView = LessonInfoView()
     let daysView = DaysView()
+    let readerView = ReaderView()
     
     init(lesson: Lesson, idQuartely: String, languageCode: String) {
         self.lesson = lesson
@@ -65,16 +67,36 @@ extension ReaderController {
             dateFormatter.dateFormat = "MMM dd"
             daysView.label.text = "\(dateFormatter.string(from: dateStart).capitalized) - \(dateFormatter.string(from: dateEnd).capitalized)"
         }
+        
+        lessonInfoView.translatesAutoresizingMaskIntoConstraints = false
+        lessonInfoView.lessonTitle.text = lesson.title
+        
+        readerView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func layout() {
         view.addSubview(daysView)
-        
+        view.addSubview(lessonInfoView)
+        view.addSubview(readerView)
+
         NSLayoutConstraint.activate([
             daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             daysView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            daysView.heightAnchor.constraint(greaterThanOrEqualToConstant: 120)
+            daysView.heightAnchor.constraint(equalToConstant: 120)
+        ])
+
+        NSLayoutConstraint.activate([
+            lessonInfoView.topAnchor.constraint(equalTo: daysView.bottomAnchor),
+            lessonInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            lessonInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            readerView.topAnchor.constraint(equalTo: lessonInfoView.bottomAnchor),
+            readerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            readerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            readerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
     
@@ -141,6 +163,8 @@ extension ReaderController: DayViewModelDelegate {
 
 extension ReaderController: ReadViewModelDelegate {
     func didGetRead(_ read: Read?, error: DataError?) {
-        print(read)
+        if let content = read?.content {
+            readerView.setHtmlStringToLabel(htmlString: content)
+        }
     }
 }
