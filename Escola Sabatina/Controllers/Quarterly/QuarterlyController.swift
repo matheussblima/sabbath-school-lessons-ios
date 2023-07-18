@@ -146,7 +146,7 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
         self.data = quarterlyViewModel.quarterliesGroup
         filterView.collectionView.reloadData()
         
-        let firstItem:IndexPath = IndexPath(row: 0, section: 0)
+        let firstItem: IndexPath = IndexPath(row: 0, section: 0)
         filterView.collectionView.selectItem(at: firstItem, animated: false, scrollPosition: .left)
     }
 }

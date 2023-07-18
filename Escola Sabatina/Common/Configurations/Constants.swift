@@ -20,6 +20,9 @@ struct Constants {
         static func daysURL(idQuartely: String, languageCode: String, idLesson: String) -> String {
             "\(baseUrl)/\(languageCode)/quarterlies/\(idQuartely)/lessons/\(idLesson)/index.json"
         }
+        static func readURL(idQuartely: String, languageCode: String, idLesson: String, idDay: String) -> String {
+            "\(baseUrl)/\(languageCode)/quarterlies/\(idQuartely)/lessons/\(idLesson)/days/\(idDay)/read/index.json"
+        }
     }
 }
 

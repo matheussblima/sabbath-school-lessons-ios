@@ -16,6 +16,7 @@ class ReaderController: UIViewController {
     let idQuartely: String
     let languageCode: String
     let dayViewModel = DayViewModel()
+    let readViewModel = ReadViewModel()
    
     let daysView = DaysView()
     
@@ -52,16 +53,16 @@ extension ReaderController {
         daysView.collectionView.delegate = self
         daysView.collectionView.register(DaysViewCell.self, forCellWithReuseIdentifier: DaysViewCell.indentifier)
         
-        let dateFormatterGet = DateFormatter()
-        dateFormatterGet.dateFormat = "dd/MM/yyyy"
-
+        readViewModel.delegate = self
+        
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "MMM dd"
+        dateFormatter.dateFormat = "dd/MM/yyyy"
 
-        let dateStart: Date? = dateFormatterGet.date(from: lesson.startDate)
-        let dateEnd: Date? = dateFormatterGet.date(from: lesson.endDate)
+        let dateStart: Date? = dateFormatter.date(from: lesson.startDate)
+        let dateEnd: Date? = dateFormatter.date(from: lesson.endDate)
         
         if let dateStart = dateStart, let dateEnd = dateEnd {
+            dateFormatter.dateFormat = "MMM dd"
             daysView.label.text = "\(dateFormatter.string(from: dateStart).capitalized) - \(dateFormatter.string(from: dateEnd).capitalized)"
         }
     }
@@ -80,6 +81,12 @@ extension ReaderController {
     private func setupNavigation() {
         title = lesson.title
         navigationItem.largeTitleDisplayMode = .never
+    }
+}
+
+extension ReaderController {
+    func getRead(idDay: String) {
+        readViewModel.getRead(idQuartely: idQuartely, languageCode: languageCode, idLesson: lesson.id, idDay: idDay)
     }
 }
 
@@ -102,7 +109,7 @@ extension ReaderController: UICollectionViewDataSource {
             dataFormatter.dateFormat = "dd"
             cell.labelDay.text = dataFormatter.string(from: date)
             dataFormatter.dateFormat = "EEE"
-            cell.labelDayName.text = dataFormatter.string(from: date).uppercased()
+            cell.labelDayName.text = dataFormatter.string(from: date).uppercased().replacingOccurrences(of: ".", with: "")
         }
         return cell
     }
@@ -114,13 +121,26 @@ extension ReaderController: UICollectionViewDelegate, UICollectionViewDelegateFl
         let size = (collectionView.frame.size.width - 60) / 7
         return CGSize(width: size, height: collectionView.frame.size.height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let day = days[indexPath.row]
+        getRead(idDay: day.id)
+    }
 }
 
 extension ReaderController: DayViewModelDelegate {
     func didGetDays(_ days: [Day]?, error: DataError?) {
         if let days = days {
             self.days = days
+            getRead(idDay: days[0].id)
             daysView.collectionView.reloadData()
+            daysView.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
         }
+    }
+}
+
+extension ReaderController: ReadViewModelDelegate {
+    func didGetRead(_ read: Read?, error: DataError?) {
+        print(read)
     }
 }
