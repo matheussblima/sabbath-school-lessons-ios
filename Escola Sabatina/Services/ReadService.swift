@@ -22,10 +22,8 @@ class ReadService: ReadServiceProtocol {
                 switch response.result {
                 case .success(let read):
                     completion(.success(read))
-                    print(read)
                 case .failure(let error):
                     completion(.failure(.netWorkingError(error.localizedDescription)))
-                    print(error)
                 }
             }
     }

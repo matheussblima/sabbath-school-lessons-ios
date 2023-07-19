@@ -7,9 +7,10 @@
 
 import Foundation
 import UIKit
+import WebKit
 
 class ReaderView: UIView {
-    let htmlText = UITextView()
+    let webView = WKWebView()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -25,30 +26,24 @@ class ReaderView: UIView {
 
 extension ReaderView {
     private func initialSetup() {
-
-        htmlText.translatesAutoresizingMaskIntoConstraints = false
-        htmlText.textColor = .black
+        webView.translatesAutoresizingMaskIntoConstraints = false
     }
     
     private func layout() {
-        addSubview(htmlText)
+        addSubview(webView)
         
         NSLayoutConstraint.activate([
-            htmlText.topAnchor.constraint(equalTo: topAnchor),
-            htmlText.leadingAnchor.constraint(equalTo: leadingAnchor),
-            htmlText.trailingAnchor.constraint(equalTo: trailingAnchor),
-            htmlText.bottomAnchor.constraint(equalTo: bottomAnchor)
+            webView.topAnchor.constraint(equalTo: topAnchor),
+            webView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            webView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }
 }
 
 extension ReaderView {
     func setHtmlStringToLabel(htmlString: String) {
-        let data = htmlString.data(using: .utf8)
-
-        if let data = data {
-            htmlText.attributedText = try? NSAttributedString(data: data, options: [.documentType: NSAttributedString.DocumentType.html, .characterEncoding: String.Encoding.utf8.rawValue], documentAttributes: nil)
-        }
+        webView.loadHTMLString(htmlString, baseURL: nil)
     }
 }
 

@@ -23,7 +23,6 @@ class QuarterliesService: QuarterliesServiceProtocol {
                 case .success(let quarterlies):
                     completion(.success(quarterlies))
                 case .failure(let error):
-                    print(error)
                     completion(.failure(.netWorkingError(error.localizedDescription)))
                 }
             }

@@ -140,7 +140,7 @@ extension QuarterlyController: QuarterlyViewModelDelegate {
     
     func didGetQuarterlies(_ quarterlyViewModel: QuarterlyViewModel, error: DataError?) {
         if let error = error {
-            print(error)
+            return
         }
         
         self.data = quarterlyViewModel.quarterliesGroup

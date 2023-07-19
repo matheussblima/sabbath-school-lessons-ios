@@ -7,6 +7,7 @@
 
 import Foundation
 import UIKit
+import WebKit
 
 class ReaderController: UIViewController {
     
@@ -18,6 +19,8 @@ class ReaderController: UIViewController {
     let dayViewModel = DayViewModel()
     let readViewModel = ReadViewModel()
    
+    let scroll = UIScrollView()
+    let content = UIView()
     let lessonInfoView = LessonInfoView()
     let daysView = DaysView()
     let readerView = ReaderView()
@@ -50,6 +53,9 @@ extension ReaderController {
         dayViewModel.add(delegate: self)
         dayViewModel.getDays(idQuartely: idQuartely, languageCode: languageCode, idLesson: lesson.id)
         
+        scroll.translatesAutoresizingMaskIntoConstraints = false
+        content.translatesAutoresizingMaskIntoConstraints = false
+        
         daysView.translatesAutoresizingMaskIntoConstraints = false
         daysView.collectionView.dataSource = self
         daysView.collectionView.delegate = self
@@ -72,12 +78,16 @@ extension ReaderController {
         lessonInfoView.lessonTitle.text = lesson.title
         
         readerView.translatesAutoresizingMaskIntoConstraints = false
+        readerView.webView.navigationDelegate = self
+        readerView.webView.scrollView.isScrollEnabled = false
     }
     
     private func layout() {
         view.addSubview(daysView)
-        view.addSubview(lessonInfoView)
-        view.addSubview(readerView)
+        view.addSubview(scroll)
+        scroll.addSubview(content)
+        content.addSubview(lessonInfoView)
+        content.addSubview(readerView)
 
         NSLayoutConstraint.activate([
             daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -85,18 +95,32 @@ extension ReaderController {
             daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             daysView.heightAnchor.constraint(equalToConstant: 120)
         ])
+        
+        NSLayoutConstraint.activate([
+            scroll.topAnchor.constraint(equalTo: daysView.bottomAnchor),
+            scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
 
         NSLayoutConstraint.activate([
-            lessonInfoView.topAnchor.constraint(equalTo: daysView.bottomAnchor),
-            lessonInfoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            lessonInfoView.trailingAnchor.constraint(equalTo: view.trailingAnchor)
+            content.topAnchor.constraint(equalTo: scroll.topAnchor),
+            content.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            content.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            content.bottomAnchor.constraint(equalTo: scroll.bottomAnchor)
+        ])
+        
+        NSLayoutConstraint.activate([
+            lessonInfoView.topAnchor.constraint(equalTo: content.topAnchor),
+            lessonInfoView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
+            lessonInfoView.trailingAnchor.constraint(equalTo: content.trailingAnchor)
         ])
         
         NSLayoutConstraint.activate([
             readerView.topAnchor.constraint(equalTo: lessonInfoView.bottomAnchor),
-            readerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            readerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            readerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            readerView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
+            readerView.trailingAnchor.constraint(equalTo: content.trailingAnchor),
+            readerView.bottomAnchor.constraint(equalTo: content.bottomAnchor)
         ])
     }
     
@@ -154,9 +178,11 @@ extension ReaderController: DayViewModelDelegate {
     func didGetDays(_ days: [Day]?, error: DataError?) {
         if let days = days {
             self.days = days
-            getRead(idDay: days[0].id)
-            daysView.collectionView.reloadData()
-            daysView.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
+            if let day = days.first {
+                getRead(idDay: day.id)
+                daysView.collectionView.reloadData()
+                daysView.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
+            }
         }
     }
 }
@@ -165,6 +191,14 @@ extension ReaderController: ReadViewModelDelegate {
     func didGetRead(_ read: Read?, error: DataError?) {
         if let content = read?.content {
             readerView.setHtmlStringToLabel(htmlString: content)
+        }
+    }
+}
+
+extension ReaderController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.readerView.heightAnchor.constraint(equalToConstant: webView.scrollView.contentSize.height).isActive = true
         }
     }
 }
