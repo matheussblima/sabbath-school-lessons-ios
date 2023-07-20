@@ -183,15 +183,25 @@ extension ReaderController: DayViewModelDelegate {
 extension ReaderController: ReadViewModelDelegate {
     func didGetRead(_ read: Read?, error: DataError?) {
         if let content = read?.content {
-            readerView.setHtmlStringToLabel(htmlString: content)
+            guard let filePath = Bundle.main.path(forResource: "index", ofType: "html") else {
+                print("File not found")
+                return
+            }
+    
+            var htmlString = try? String(contentsOfFile: filePath, encoding: .utf8)
+            htmlString = htmlString?.replacingOccurrences(of: "{{content}}", with: content)
+            readerView.setHtmlStringToLabel(htmlString: htmlString ?? content)
         }
     }
 }
 
 extension ReaderController: WKNavigationDelegate {
+    func webView(_ webView: WKWebView, didStartProvisionalNavigation navigation: WKNavigation!) {
+        self.heightReaderView?.constant = 0
+    }
+    
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            print(webView.scrollView.contentSize.height)
             self.heightReaderView?.constant = webView.scrollView.contentSize.height
         }
     }
