@@ -11,3 +11,13 @@ The Sabbath School App for iOS is an app that allows you to read the lessons of 
 pod install
 ```
 
+## Features
+
+- [x] Lesson Reader HTML
+- [ ] Lesson Reader PDF
+- [ ] Highlights
+- [ ] Notes 
+- [ ] In-app Bible verses 
+- [ ] Daily reminders 
+- [ ] Reading themes (Font type, Font size)
+
