@@ -34,8 +34,8 @@ extension ReaderView {
         
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: topAnchor),
-            webView.leadingAnchor.constraint(equalTo: leadingAnchor),
-            webView.trailingAnchor.constraint(equalTo: trailingAnchor),
+            webView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
+            trailingAnchor.constraint(equalToSystemSpacingAfter: webView.trailingAnchor, multiplier: 2),
             webView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
     }

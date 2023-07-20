@@ -20,10 +20,12 @@ class ReaderController: UIViewController {
     let readViewModel = ReadViewModel()
    
     let scroll = UIScrollView()
-    let content = UIView()
+    let stack = UIStackView()
     let lessonInfoView = LessonInfoView()
     let daysView = DaysView()
     let readerView = ReaderView()
+    
+    var heightReaderView: NSLayoutConstraint?
     
     init(lesson: Lesson, idQuartely: String, languageCode: String) {
         self.lesson = lesson
@@ -54,7 +56,9 @@ extension ReaderController {
         dayViewModel.getDays(idQuartely: idQuartely, languageCode: languageCode, idLesson: lesson.id)
         
         scroll.translatesAutoresizingMaskIntoConstraints = false
-        content.translatesAutoresizingMaskIntoConstraints = false
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.spacing = 8
         
         daysView.translatesAutoresizingMaskIntoConstraints = false
         daysView.collectionView.dataSource = self
@@ -85,9 +89,9 @@ extension ReaderController {
     private func layout() {
         view.addSubview(daysView)
         view.addSubview(scroll)
-        scroll.addSubview(content)
-        content.addSubview(lessonInfoView)
-        content.addSubview(readerView)
+        stack.addArrangedSubview(lessonInfoView)
+        stack.addArrangedSubview(readerView)
+        scroll.addSubview(stack)
 
         NSLayoutConstraint.activate([
             daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
@@ -104,24 +108,13 @@ extension ReaderController {
         ])
 
         NSLayoutConstraint.activate([
-            content.topAnchor.constraint(equalTo: scroll.topAnchor),
-            content.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            content.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            content.bottomAnchor.constraint(equalTo: scroll.bottomAnchor)
+            stack.topAnchor.constraint(equalTo: scroll.topAnchor),
+            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            stack.bottomAnchor.constraint(equalTo: scroll.bottomAnchor)
         ])
-        
-        NSLayoutConstraint.activate([
-            lessonInfoView.topAnchor.constraint(equalTo: content.topAnchor),
-            lessonInfoView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            lessonInfoView.trailingAnchor.constraint(equalTo: content.trailingAnchor)
-        ])
-        
-        NSLayoutConstraint.activate([
-            readerView.topAnchor.constraint(equalTo: lessonInfoView.bottomAnchor),
-            readerView.leadingAnchor.constraint(equalTo: content.leadingAnchor),
-            readerView.trailingAnchor.constraint(equalTo: content.trailingAnchor),
-            readerView.bottomAnchor.constraint(equalTo: content.bottomAnchor)
-        ])
+        heightReaderView = readerView.heightAnchor.constraint(equalToConstant: 1)
+        heightReaderView?.isActive = true
     }
     
     private func setupNavigation() {
@@ -198,7 +191,8 @@ extension ReaderController: ReadViewModelDelegate {
 extension ReaderController: WKNavigationDelegate {
     func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-            self.readerView.heightAnchor.constraint(equalToConstant: webView.scrollView.contentSize.height).isActive = true
+            print(webView.scrollView.contentSize.height)
+            self.heightReaderView?.constant = webView.scrollView.contentSize.height
         }
     }
 }
