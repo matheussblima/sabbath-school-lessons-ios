@@ -27,6 +27,7 @@ class ReaderView: UIView {
 extension ReaderView {
     private func initialSetup() {
         webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.backgroundColor = .white
     }
     
     private func layout() {
@@ -34,16 +35,10 @@ extension ReaderView {
         
         NSLayoutConstraint.activate([
             webView.topAnchor.constraint(equalTo: topAnchor),
-            webView.leadingAnchor.constraint(equalToSystemSpacingAfter: leadingAnchor, multiplier: 2),
-            trailingAnchor.constraint(equalToSystemSpacingAfter: webView.trailingAnchor, multiplier: 2),
+            webView.leadingAnchor.constraint(equalTo: leadingAnchor),
+            webView.trailingAnchor.constraint(equalTo: trailingAnchor),
             webView.bottomAnchor.constraint(equalTo: bottomAnchor)
         ])
-    }
-}
-
-extension ReaderView {
-    func setHtmlStringToLabel(htmlString: String) {
-        webView.loadHTMLString(htmlString, baseURL: nil)
     }
 }
 

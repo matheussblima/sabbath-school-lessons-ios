@@ -8,19 +8,19 @@
 import Foundation
 
 protocol DayViewModelDelegate: AnyObject {
-    func didGetDays(_ days: [Day]?, error: DataError?)
+    func didGetDays(_ dayResponse: GetDayResponse?, error: DataError?)
 }
 
 class DayViewModel: MulticastDelegate<DayViewModelDelegate> {
     let daysService = DayService()
-    var days: [Day]?
+    var dayResponse: GetDayResponse?
    
     func getDays(idQuartely: String, languageCode: String, idLesson: String) {
         daysService.getDays(idQuartely: idQuartely, languageCode: languageCode, idLesson: idLesson) { [self] result in
             switch result {
-            case .success(let days):
-                self.days = days
-                invokeForEachDelegate { $0.didGetDays(days, error: nil) }
+            case .success(let dayResponse):
+                self.dayResponse = dayResponse
+                invokeForEachDelegate { $0.didGetDays(dayResponse, error: nil) }
             case .failure(let error):
                 invokeForEachDelegate { $0.didGetDays(nil, error: .netWorkingError(error.localizedDescription)) }
             }

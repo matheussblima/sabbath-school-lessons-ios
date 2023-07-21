@@ -9,6 +9,7 @@ import Foundation
 
 struct Constants {
     static let appName: String = "Sabbath School".localized
+    static let title: String = "Title".localized
     
     struct API {
         static let baseUrl: String = "https://sabbath-school-stage.adventech.io/api/v2"

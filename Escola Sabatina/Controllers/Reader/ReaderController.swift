@@ -12,6 +12,7 @@ import WebKit
 class ReaderController: UIViewController {
     
     var days = [Day]()
+    var pdfs = [Pdf]()
     
     let lesson: Lesson
     let idQuartely: String
@@ -83,38 +84,56 @@ extension ReaderController {
         
         readerView.translatesAutoresizingMaskIntoConstraints = false
         readerView.webView.navigationDelegate = self
-        readerView.webView.scrollView.isScrollEnabled = false
     }
     
     private func layout() {
-        view.addSubview(daysView)
-        view.addSubview(scroll)
-        stack.addArrangedSubview(lessonInfoView)
-        stack.addArrangedSubview(readerView)
-        scroll.addSubview(stack)
-
-        NSLayoutConstraint.activate([
-            daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            daysView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            daysView.heightAnchor.constraint(equalToConstant: 120)
-        ])
+        if !lesson.pdfOnly {
+            readerView.webView.scrollView.isScrollEnabled = false
+            
+            view.addSubview(daysView)
+            view.addSubview(scroll)
+            stack.addArrangedSubview(lessonInfoView)
+            stack.addArrangedSubview(readerView)
+            scroll.addSubview(stack)
+            
+            NSLayoutConstraint.activate([
+                daysView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                daysView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                daysView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                daysView.heightAnchor.constraint(equalToConstant: 120)
+            ])
+            
+            NSLayoutConstraint.activate([
+                scroll.topAnchor.constraint(equalTo: daysView.bottomAnchor),
+                scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+            
+            NSLayoutConstraint.activate([
+                stack.topAnchor.constraint(equalTo: scroll.topAnchor),
+                stack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                stack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                stack.bottomAnchor.constraint(equalTo: scroll.bottomAnchor)
+            ])
+            heightReaderView = readerView.heightAnchor.constraint(equalToConstant: 1)
+            heightReaderView?.isActive = true
+        } else {
+            readerView.webView.scrollView.isScrollEnabled = true
+            
+            view.addSubview(readerView)
+            
+            NSLayoutConstraint.activate([
+                readerView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+                readerView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+                readerView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+                readerView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+            ])
+        }
         
-        NSLayoutConstraint.activate([
-            scroll.topAnchor.constraint(equalTo: daysView.bottomAnchor),
-            scroll.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            scroll.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            scroll.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
+    
 
-        NSLayoutConstraint.activate([
-            stack.topAnchor.constraint(equalTo: scroll.topAnchor),
-            stack.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            stack.bottomAnchor.constraint(equalTo: scroll.bottomAnchor)
-        ])
-        heightReaderView = readerView.heightAnchor.constraint(equalToConstant: 1)
-        heightReaderView?.isActive = true
+   
     }
     
     private func setupNavigation() {
@@ -168,13 +187,23 @@ extension ReaderController: UICollectionViewDelegate, UICollectionViewDelegateFl
 }
 
 extension ReaderController: DayViewModelDelegate {
-    func didGetDays(_ days: [Day]?, error: DataError?) {
-        if let days = days {
+    func didGetDays(_ dayResponse: GetDayResponse?, error: DataError?) {
+        if let days = dayResponse?.days {
             self.days = days
             if let day = days.first {
                 getRead(idDay: day.id)
                 daysView.collectionView.reloadData()
                 daysView.collectionView.selectItem(at: IndexPath(row: 0, section: 0), animated: false, scrollPosition: .left)
+            }
+        }
+        
+        if let pdfs = dayResponse?.pdfs {
+            self.pdfs = pdfs
+            
+            if lesson.pdfOnly {
+                if let pdf = pdfs.first {
+                    readerView.webView.load(URLRequest(url: pdf.src))
+                }
             }
         }
     }
@@ -190,7 +219,7 @@ extension ReaderController: ReadViewModelDelegate {
     
             var htmlString = try? String(contentsOfFile: filePath, encoding: .utf8)
             htmlString = htmlString?.replacingOccurrences(of: "{{content}}", with: content)
-            readerView.setHtmlStringToLabel(htmlString: htmlString ?? content)
+            readerView.webView.loadHTMLString(htmlString ?? "", baseURL: nil)
         }
     }
 }

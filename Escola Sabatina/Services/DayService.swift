@@ -8,7 +8,7 @@
 import Foundation
 import Alamofire
 
-typealias getDayServiceResponse = (Swift.Result<[Day]?, DataError>) -> Void
+typealias getDayServiceResponse = (Swift.Result<GetDayResponse?, DataError>) -> Void
 
 protocol DayServiceProtocol {
     func getDays(idQuartely: String, languageCode: String, idLesson: String, completion: @escaping getDayServiceResponse)
@@ -17,6 +17,7 @@ protocol DayServiceProtocol {
 struct GetDayResponse: Codable {
     let lesson: Lesson
     let days: [Day]
+    let pdfs: [Pdf]
 }
 
 class DayService: DayServiceProtocol {
@@ -26,7 +27,7 @@ class DayService: DayServiceProtocol {
             .responseDecodable(of: GetDayResponse.self) { response in
                 switch response.result {
                 case .success(let responseDays):
-                    completion(.success(responseDays.days))
+                    completion(.success(responseDays))
                 case .failure(let error):
                     completion(.failure(.netWorkingError(error.localizedDescription)))
                 }

@@ -37,7 +37,7 @@ extension LessonInfoView {
         title.translatesAutoresizingMaskIntoConstraints = false
         title.textColor = R.color.yellow()
         title.font = UIFont.boldSystemFont(ofSize: 16)
-        title.text = "Título:"
+        title.text = Constants.title
         
         lessonTitle.translatesAutoresizingMaskIntoConstraints = false
         lessonTitle.textColor = .white
