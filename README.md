@@ -14,7 +14,7 @@ pod install
 ## Features
 
 - [x] Lesson Reader HTML
-- [ ] Lesson Reader PDF
+- [x] Lesson Reader PDF
 - [ ] Highlights
 - [ ] Notes 
 - [ ] In-app Bible verses 
